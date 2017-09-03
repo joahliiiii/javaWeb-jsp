@@ -1,0 +1,88 @@
+0.
+1.jsp基本规范
+    <% %>里面写java代码.(方法内部可以些什么,这里就可以些什么)
+    <%= %> 表达式,用于输出,一条 表达式/变量 ;print()里面可以放什么这里就可以放什么
+    <%! %> 声明,用来创建类的成员变量和成员方法 ;类体里面可以放什么这里就可以放什么
+2.thead 和 table的caption
+    thead也是表格中的一部分,他是表格的第一行和下面的其他行不同的是: 他只有第一列
+3.request.getAttribute() 和 request.getParameter()
+    使用getAttribute()需要先setAttribute()
+    在获取form提交的表单的数据时候使用的是getParameter()
+4.jsp 文件在运行之前先要生成java 文件,然后编译成 .class文件
+    在jsp里面的java代码都是原封不动的放到jsp对应的Java文件中.其他的东西都是使用out.Write()输出的
+    <%=%>在转换为Java代码之后里面的内容是在out.print()的,然后这个是带缓存机制的会在response之后输出
+5.在jsp里面写jsp的注释不会发送到服务器,但是如果写html注释那么会发送到服务器,如果查看源代码还可以看到.
+    <!-- <%=aaa%> --!> 会在html页面显示
+6.cookie 不可以跨浏览器
+7.如果访问路径包含cookie路径,那么会加载cookie
+8.cookie 和 session
+    都是服务器端的对象,cookie保存在本地,session保存在服务器
+    session是javaWeb,cookie是http协议指定的
+9.session 是在request.getSession()的时候才会创建
+10.访问 session会自动使用session
+11.reqest.getSession(false)
+    表示如果session缓存中不存在session ,那么返回null, 而不会创建session对象
+    和request.getSession()的 区别应该是在不存在session的情况下是否创建新的session
+12.把所有的类型的数据转化为String的方法: String.valueOf()
+13.BufferedImage.setRGB() 的作用是设置某个点的RGB属性值
+14.请求重定向,响应转发
+15.errorPage 和 isErrorPage
+    errorPage 在jsp的 page 内申明指定出错之后转发到哪里
+    isErrorPage: 在jsp的 page 内申明,指定此页面是否是错误处理的页面,
+        指定了是错误处理页面在http响应的信息是500,如果没指定是错误处理页面那么http响应的状态码是500
+        当isErrorPage的值为true时,可以使用jsp的九大内置对象中的exception.(只有他可以使用exception)
+16.在 web.xml配置信息和 errorPage的使用优先级
+    在jsp页面的page标签中设置了errorPage的值之后,出错转发到配置的错误页面
+    如果在jsp中的page 标签中没有设置errorPage 的值,那么出错之后会跳转到在web.xml中配置的地址
+17.jsp的就九大内置对象
+    jspWriter(out),ServletConfig,page,pageContext,exception,HttpServletRequest,HttpServletResponse,application(ServletContext),HttpSession
+18.getRequestDispatcher().include() 和 <%@include%>
+    前者是一个方法,包含和被包含的是两个servlet,所有有俩个.class文件.只是把响应的内容在运行时合并了.
+    后者是在jsp编译为javaWeb文件时,就生成一个共同的java文件,然后只有一个.class
+    前者是动态的,后者是静态包含
+    包含的作用是使代码可以重用
+19.<jsp:include> 和 getRequestDispatcher().include()是一样的.
+20.javaBean
+    1. 必须要有无参的构造方法
+    2. 提供get/set方法
+    3. 属性: 有get/set方法,可以没有成员变量,只有get/set方法,属性名称由get/set方法决定,和变量无关
+21.EL 表达式
+    ${xx}如果没找到那么返回得是"" 不是null
+    EL表达式只能做输出
+    ${pageScope.xxx},${requestScope.xx},${sessionScope.xxx},${applicationScope.xxx} 获取指定域的属性
+        在这里这个Scope很关键,不要忘记.
+    如果需要输出的字符串是在某个对象里面的那么只需要 ${requestScope.obj.attr}
+        其实就是调用GET方法,并不需要实际上有这个变量只要有get方法就可以了.
+22.域的大小
+    在一个页面中,最小的域就是pageContext,然后是request,然后是session域,最大的是application域.
+23.el 表达式
+    Cookie: Map<String,Cookie>  ${Cookie.xxx} 得到的是一个Cookie的对象
+    正确的写法: ${Cookie.JSESSIONID.value}
+    要注意这里需要注意大小写
+24.<c:set >默认的存储域是 pageContext
+    <c:remove var="a"/> 是删除所有域下的属性名为 a 的条目 如果要删除指定域下面的属性,那么需要加参数Scope="request";
+    <c:url value="/index.jsp"><c:param name="username" value="joah"/></c:url> 把路径输出到页面上
+        如果想要保存到域里面,那么就要在 c:url 里面加入参数 var 和 scope.
+    <c:xxx > 标签在服务器端执行.所有在<a>标签里面可以嵌套<c>.
+25.${pageContext.request.contextPath} 是取出部署应用程序的名字
+26.<c:forEach>
+    items 属性代表想要遍历的数组的名字
+27.<fmt:formatNumber>
+    里面的pattern属性,如果是0.00 那么会保留两位小数,四舍五入,不足两位用0补全
+                        #.## 那么保留两位小数,四舍五入,不足不补全
+28:如果想要网页后面的内容不在显示
+    使用自定义标签时候: 在执行完了一段代码之后不想让页面的后面的代码继续显示,
+    那么就要在tld的类中抛出一个异常 SkipPageException(),这个异常在服务器看到的时候是不会出现报错的,
+    服务器会直接不显示jsp(页面)的后面的内容.
+29.在使用自定义标签的时候一定要记住去tld文件配置属性
+    required: 设置是否是必须的
+    rtexprvalue: 设置属性是否可以使用EL表达式
+30:tld
+    在设置tag的时候,body-content中一般使用两个参数:
+        empty : 表示为空
+        scriptless: 表示是否接受EL表达式,文本,jsp动作
+31:在使用jstl的时候 scope 参数有四个,分别是:
+    requestScope, pageScope, sessionScope,application
+32. ${param.xxx} 是从地址栏的参数列表里面获取xxx属性,
+    地址栏的参数属于 param,
+33.request.getParameter()可以从地址栏获取参数,也可以从表单获取参数

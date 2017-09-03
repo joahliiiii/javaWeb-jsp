@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>calcute</servlet-name>
+        <servlet-class>servlet.calculateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>calcute</servlet-name>
+        <url-pattern>/calServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>servlet.loginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/loginServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>verfifyCodeServlet</servlet-name>
+        <servlet-class>servlet.verfifyCodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>verfifyCodeServlet</servlet-name>
+        <url-pattern>/verfifyCodeServlet</url-pattern>
+    </servlet-mapping>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/error404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/error500.jsp</location>
+    </error-page>
+    <error-page>
+        <!--<exception-type>java.lang.RuntimeException</exception-type>-->
+        <exception-type>java.lang.ArithmeticException</exception-type>
+        <location>/index.jsp</location>
+    </error-page>
+
+    <context-param>
+        <param-name>xxx</param-name>
+        <param-value>XXX</param-value>
+    </context-param>
+</web-app>
